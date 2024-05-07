@@ -1,2 +1,3 @@
 build:
-	gcc -o montador main.c
+	gcc -o montador main.c handle_input.c messages.c
+	
