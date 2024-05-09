@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-FILE* readFile(char *filePath);
+FILE* openFile(char *filePath);
 void writeFile(char *filePath);
 
 #endif /* __FILE_HANDLER__ */

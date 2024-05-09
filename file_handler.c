@@ -1,6 +1,6 @@
 #include "file_handler.h"
 
-FILE* readFile(char *filePath)
+FILE* openFile(char *filePath)
 {
 	FILE* pFile;
 
@@ -13,7 +13,6 @@ FILE* readFile(char *filePath)
 void writeFile(char *filePath)
 {
 	FILE* pFile;
-	char *ext, *newfilePath;
 	char *test = "teste";
 
 	if(strcmp(getExtFile(filePath), "asm")==0) 

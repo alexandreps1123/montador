@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     if(strcmp(argv[1], "-p")==0)
     {
 
-        pFile = readFile(argv[2]);
+        pFile = openFile(argv[2]);
         // preProcessor();
 
         writeFile(argv[2]);
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     } 
     else if(strcmp(argv[1], "-o")==0)
     {
-        pFile = readFile(argv[2]);
+        pFile = openFile(argv[2]);
 
         // assembler();
 
