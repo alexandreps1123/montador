@@ -1,27 +1,36 @@
 #include "messages.h"
-#include "handle_input.h"
+#include "input_handler.h"
+#include "file_handler.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 int main(int argc, char *argv[])
 {
+    FILE *pFile;
+
     checkArgs(argc, argv);
 
-    printf("Passou\n");
+    if(strcmp(argv[1], "-p")==0)
+    {
+
+        pFile = readFile(argv[2]);
+        // preProcessor();
+
+        writeFile(argv[2]);
+
+        fclose(pFile);
+    } 
+    else if(strcmp(argv[1], "-o")==0)
+    {
+        pFile = readFile(argv[2]);
+
+        // assembler();
+
+        writeFile(argv[2]);
+
+        fclose(pFile);
+    }
 
     return 0;
-}
-
-void readFile(char flag[], char fileName[])
-{
-    // char str[] = fileName;
-    char *pch;
-    pch = strtok(fileName, ".");
-    while (pch != NULL)
-    {
-        printf("%s\n", pch);
-        pch = strtok(NULL, ".");
-    }
-    
 }

@@ -1,6 +1,4 @@
 #include "messages.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 void helpMessage()
 {
@@ -22,5 +20,11 @@ void invalidOptionMessage()
 void invalidExtensionMessage()
 {
     printf("Extensao invalida.\n");
+    exit(1);
+}
+
+void openFileErrorMessage()
+{
+    printf("Erro ao abrir arquivo.\n");
     exit(1);
 }

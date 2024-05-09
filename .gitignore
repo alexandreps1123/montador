@@ -1,1 +1,5 @@
 montador
+*.pre
+*.obj
+
+.vscode

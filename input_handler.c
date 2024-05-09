@@ -1,14 +1,4 @@
-#include "handle_input.h"
-#include "messages.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
-void validateInput(char *flag);
-void validateInputs(char *flag, char *fileName);
-void validateFlagAndFileExtension(char *flag, char *extension);
-int checkFlagExtension(char *flag, char *extension);
-char* validateFileExtension(char *fileName);
+#include "input_handler.h"
 
 void checkArgs(int argc, char *argv[])
 {
@@ -19,15 +9,12 @@ void checkArgs(int argc, char *argv[])
 
 void validateInput(char *flag)
 {
-    if (strcmp(flag, "-help")==0)
-    {
-        helpMessage();
-    }
+    if (strcmp(flag, "-help")==0) helpMessage();
 
     invalidOptionMessage();
 }
 
-void validateInputs(char *flag, char *fileName)
+void validateInputs(char *flag, char *filePath)
 {
     char *extension;
 
@@ -36,16 +23,18 @@ void validateInputs(char *flag, char *fileName)
         invalidOptionMessage();
     }
 
-    extension = validateFileExtension(fileName);
+    extension = getExtFile(filePath);
     validateFlagAndFileExtension(flag, extension);
 }
 
-char* validateFileExtension(char *fileName)
+char* getExtFile(char *filePath)
 {
     int tokenNumbers = 0;
-    char *pch, *extension;
+    char *pch, *extension, temp[80];
+    
+    strcpy(temp, filePath);
+    pch = strtok(temp, ".");
 
-    pch = strtok(fileName, ".");
     while (pch != NULL)
     {
         tokenNumbers++;
@@ -57,6 +46,14 @@ char* validateFileExtension(char *fileName)
     if(tokenNumbers!=2) invalidExtensionMessage();
     
     return extension;
+}
+
+char* getNameFile(char *filePath)
+{
+    char *pch, *temp;
+
+    temp = filePath;
+    return strtok(temp, ".");
 }
 
 void validateFlagAndFileExtension(char *flag, char *extension)
