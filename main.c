@@ -4,6 +4,20 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
+
+// Função para remover espaços em branco extras de uma linha
+void trim(char *str) {
+    int i = 0, j = -1;
+    while (str[i]) {
+        if (!isspace(str[i]) || (i > 0 && !isspace(str[i - 1]))) {
+            str[++j] = str[i];
+        }
+        i++;
+    }
+    str[++j] = '\0';
+}
+
 
 int main(int argc, char *argv[])
 {
