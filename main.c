@@ -18,6 +18,20 @@ void trim(char *str) {
     str[++j] = '\0';
 }
 
+void preProcessor(char *str){
+
+}
+
+void assembler(char *str){
+    switch(){
+        case 1:
+            break;
+        default:
+            break;
+    }
+}
+
+
 
 int main(int argc, char *argv[])
 {
