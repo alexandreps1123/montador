@@ -31,12 +31,12 @@ void removeUnnecessaryCharacters(char *lineContent)
     char *formatedLine = malloc(strlen(lineContent)); 
     char *pch, *temp = lineContent;
 
-    pch = strtok(temp, " \t");
+    pch = strtok(temp, " \t\n\r");
     while (pch != NULL)
     {
         strcat(formatedLine, pch);
         strcat(formatedLine, " ");
-        pch = strtok(NULL, " \t");
+        pch = strtok(NULL, " \t\n\r");
     }
 
     strcpy(lineContent, formatedLine);
@@ -58,7 +58,7 @@ void toUpperCase(char *lineContent)
 
 int validCharacter(char *lineContent) 
 {
-    return !(lineContent[0] == '\n' || lineContent[0] == ';');
+    return !(lineContent[0] == '\n' || lineContent[0] == ';' || lineContent[0] == NULL);
 }
 
 // int isFlag(char *lineContent) 

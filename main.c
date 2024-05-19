@@ -19,18 +19,18 @@
 //     str[++j] = '\0';
 // }
 
-void preProcessor(char *str){
+// void preProcessor(char *str){
 
-}
+// }
 
-void assembler(char *str){
-    switch(){
-        case 1:
-            break;
-        default:
-            break;
-    }
-}
+// void assembler(char *str){
+//     switch(){
+//         case 1:
+//             break;
+//         default:
+//             break;
+//     }
+// }
 
 
 
