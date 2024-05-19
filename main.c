@@ -1,6 +1,7 @@
 #include "messages.h"
 #include "input_handler.h"
 #include "file_handler.h"
+#include "pre_processor.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -29,7 +30,7 @@ int main(int argc, char *argv[])
     {
 
         pFile = openFile(argv[2]);
-        // preProcessor();
+        preProcessor();
 
         writeFile(argv[2]);
 

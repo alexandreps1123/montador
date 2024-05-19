@@ -1,5 +1,5 @@
 montador
-*.pre
-*.obj
+main
 
 .vscode
+.idea
