@@ -2,10 +2,10 @@
 #include "input_handler.h"
 #include "file_handler.h"
 #include "pre_processor.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
+// #include <stdio.h>
+// #include <string.h>
+// #include <stdlib.h>
+// #include <ctype.h>
 
 // Função para remover espaços em branco extras de uma linha
 // void trim(char *str) {

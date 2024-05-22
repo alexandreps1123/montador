@@ -7,9 +7,12 @@
 #include <ctype.h>
 
 void preProcessor(FILE *pFile);
+void clearString(lineContent);
 void removeComments(char *lineContent);
 void removeUnnecessaryCharacters(char *lineContent);
 void toUpperCase(char *lineContent);
-int validCharacter(char *lineContent);
+int validInitialCharacter(char *lineContent);
+int isLabel(char *lineContent);
+int isPureLabel(char *lineContent);
 
 #endif /* __PRE_PROCESSOR__ */
