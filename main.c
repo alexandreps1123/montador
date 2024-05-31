@@ -42,11 +42,12 @@ int main(int argc, char *argv[])
 
     if(strcmp(argv[1], "-p")==0)
     {
+        Text text;
 
         pFile = openFile(argv[2]);
-        preProcessor(pFile);
+        text = preProcessor(pFile);
 
-        writeFile(argv[2]);
+        writeFile(argv[2], &text);
 
         fclose(pFile);
     } 
@@ -56,7 +57,7 @@ int main(int argc, char *argv[])
 
         // assembler();
 
-        writeFile(argv[2]);
+        // writeFile(argv[2]);
 
         fclose(pFile);
     }

@@ -2,11 +2,11 @@
 
  *** 2 modos de execução
  1°
-    ./montador -p myfile.asm
+   *** ./montador -p myfile.asm
     
     *** deve gerar um arquivo pre-procressado myfile.pre.
  2° 
-    ./montador -o myfile.pre
+   *** ./montador -o myfile.pre
     
     *** deve gerar um arquivo myfile.obj
     

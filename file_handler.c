@@ -10,10 +10,10 @@ FILE* openFile(char *filePath)
 	return pFile;
 }
 
-void writeFile(char *filePath)
+void writeFile(char *filePath, Text *text)
 {
 	FILE* pFile;
-	char *test = "teste";
+	Line line;
 
 	if(strcmp(getExtFile(filePath), "asm")==0) 
 	{
@@ -21,7 +21,14 @@ void writeFile(char *filePath)
 	} 
 	else pFile = fopen(strcat(getNameFile(filePath),".obj"), "w");
 
-	fputs(test, pFile);
+	while (isEmpty(text) != 1)
+	{
+		line = *(printHead(text));
+		fputs(line.line, pFile);
+		fputs("\n", pFile);
+
+		dequeue(text);
+	}
 
 	fclose(pFile);
 

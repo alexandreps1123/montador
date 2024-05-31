@@ -1,6 +1,7 @@
 #ifndef __PRE_PROCESSOR__
 #define __PRE_PROCESSOR__
 
+#include "queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,7 +13,7 @@ typedef struct EQU
     char value[80];
 } EQU;
 
-void preProcessor(FILE *pFile);
+Text preProcessor(FILE *pFile);
 void clearString(char *lineContent, int lenght);
 void removeComments(char *lineContent);
 void removeUnnecessaryCharacters(char *lineContent);

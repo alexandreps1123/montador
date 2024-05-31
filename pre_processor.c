@@ -4,9 +4,9 @@ const int MAX_LINE_LENGTH = 256;
 const int MAX_TOKEN_LENGTH = 80;
 const int MAX_EQU_DECLARATION = 20;
 
-void preProcessor(FILE *pFile)
+Text preProcessor(FILE *pFile)
 {
-    char lineContent[MAX_LINE_LENGTH];
+    Line lineContent;
     char line[MAX_LINE_LENGTH];
 
     int countPureLabel = 0;
@@ -16,48 +16,46 @@ void preProcessor(FILE *pFile)
     int countEqu = 0;
     EQU equ[MAX_EQU_DECLARATION];
 
-    // Queue q;
+    Text text;
+    createText(&text);
 
-    // createQueue(&q);
-
-    clearString(lineContent, MAX_LINE_LENGTH);
+    clearString(lineContent.line, MAX_LINE_LENGTH);
     clearString(line, MAX_LINE_LENGTH);
 
-    while (fgets(lineContent, MAX_LINE_LENGTH, pFile) != NULL)
+    while (fgets(lineContent.line, MAX_LINE_LENGTH, pFile) != NULL)
     {
-        removeComments(lineContent);
-        removeUnnecessaryCharacters(lineContent);
-        toUpperCase(lineContent);
-
-        // TODO: verify if is a label
-        if (validInitialCharacter(lineContent))
+        removeComments(lineContent.line);
+        removeUnnecessaryCharacters(lineContent.line);
+        toUpperCase(lineContent.line);
+            
+        if (validInitialCharacter(lineContent.line))
         {
-            if (isLabel(lineContent) == 1 && isPureLabel(lineContent) == 1)
+            if (isLabel(lineContent.line) == 1 && isPureLabel(lineContent.line) == 1)
             {
                 countPureLabel++;
-                strcat(line, lineContent);
+                strcat(line, lineContent.line);
             }
             else
             {
                 for (int i = 0; i < countEqu; i++)
                 {
-                    changeForEQUValue(lineContent, equ[i]);
+                    changeForEQUValue(lineContent.line, equ[i]);
                 }
                 
                 if (countPureLabel != 0)
                 {
                     countPureLabel = 0;
-                    strcat(line, lineContent);
-                    strcpy(lineContent, line);
+                    strcat(line, lineContent.line);
+                    strcpy(lineContent.line, line);
                     clearString(line, MAX_LINE_LENGTH);
                 }
 
-                if (isEQU(lineContent))
+                if (isEQU(lineContent.line))
                 {
                     int countToken = 0;
                     char *pch;
 
-                    pch = strtok(lineContent, ":");
+                    pch = strtok(lineContent.line, ":");
 
                     strcpy(equ[countEqu].label, pch);
 
@@ -72,13 +70,13 @@ void preProcessor(FILE *pFile)
 
                     countEqu++;
 
-                    clearString(lineContent, MAX_LINE_LENGTH);
+                    clearString(lineContent.line, MAX_LINE_LENGTH);
 
                     continue;
                 }
 
-                if (isIF(lineContent)) {
-                    ifAction = getIfValue(lineContent);
+                if (isIF(lineContent.line)) {
+                    ifAction = getIfValue(lineContent.line);
                     continue;
                 }
 
@@ -86,26 +84,14 @@ void preProcessor(FILE *pFile)
                     ifAction = 1;
                     continue;
                 }
-                else printf("%s\n", lineContent);
+                else enqueue(&text, &lineContent);
             }
         }
 
-        clearString(lineContent, MAX_LINE_LENGTH);
+        clearString(lineContent.line, MAX_LINE_LENGTH);
     }
 
-    // for (size_t i = 0; i < countEqu; i++)
-    // {
-    //     // equ = *(printHead(&q));
-    //     printf("Numero: %s\n", equ[i].label);
-    //     printf("Numero: %s\n", equ[i].value);
-    //     // dequeue(&q);
-    //     // countEqu--;
-    // }
-
-    // TODO: write in a file pre processed data
-    // clear(&q);
-
-    return;
+    return text;
 }
 
 void clearString(char *lineContent, int length)
