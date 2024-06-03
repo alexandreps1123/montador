@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     {
         pFile = openFile(argv[2]);
 
-        // assembler();
+        assembler(pFile);
 
         // writeFile(argv[2]);
 

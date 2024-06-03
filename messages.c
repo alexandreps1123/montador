@@ -28,3 +28,9 @@ void openFileErrorMessage()
     printf("Erro ao abrir arquivo.\n");
     exit(1);
 }
+
+void parserErrorMessage(int countLine)
+{
+    printf("Erro léxico, linha: %d\n", countLine);
+    return;
+}

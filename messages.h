@@ -8,5 +8,6 @@ void helpMessage();
 void invalidOptionMessage();
 void invalidExtensionMessage();
 void openFileErrorMessage();
+void parserErrorMessage(int countLine);
 
 #endif /* __MESSAGES__ */
