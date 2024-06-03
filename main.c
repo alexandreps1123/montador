@@ -2,6 +2,7 @@
 #include "input_handler.h"
 #include "file_handler.h"
 #include "pre_processor.h"
+#include "assembler.h"
 // #include <stdio.h>
 // #include <string.h>
 // #include <stdlib.h>
