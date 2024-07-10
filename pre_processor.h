@@ -2,18 +2,20 @@
 #define __PRE_PROCESSOR__
 
 #include "queue.h"
+#include "file_handler.h"
+#include "consts.h"
+#include "common.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
 typedef struct EQU
 {
-    char label[80];
-    char value[80];
+    char label[MAX_TOKEN_LENGTH];
+    char value[MAX_TOKEN_LENGTH];
 } EQU;
 
-Text preProcessor(FILE *pFile);
+void preProcessor(char *filePath);
 void clearString(char *lineContent, int lenght);
 void removeComments(char *lineContent);
 void removeUnnecessaryCharacters(char *lineContent);

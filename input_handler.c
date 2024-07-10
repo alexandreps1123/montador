@@ -1,4 +1,5 @@
 #include "input_handler.h"
+#include "consts.h"
 
 void checkArgs(int argc, char *argv[])
 {
@@ -30,7 +31,7 @@ void validateInputs(char *flag, char *filePath)
 char* getExtFile(char *filePath)
 {
     int tokenNumbers = 0;
-    char *pch, *extension, temp[80];
+    char *pch, *extension, temp[MAX_TOKEN_LENGTH];
     
     strcpy(temp, filePath);
     pch = strtok(temp, ".");
@@ -50,7 +51,7 @@ char* getExtFile(char *filePath)
 
 char* getNameFile(char *filePath)
 {
-    char *pch, *temp;
+    char *temp;
 
     temp = filePath;
     return strtok(temp, ".");

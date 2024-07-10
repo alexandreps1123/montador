@@ -1,8 +1,13 @@
+#include <ctype.h>
 #include "assembler.h"
 
-void assembler(FILE *pFile) 
+void assembler(char *filePath)
 {
-    const int MAX_LINE_LENGTH = 256;
+    FILE *pFile;
+    pFile = openFile(filePath);
+    
+    Text text;
+    createText(&text);
 
     int PC = 1;
     int countLine = 1;
@@ -16,6 +21,9 @@ void assembler(FILE *pFile)
         countLine++;
     }
 
+    writeFile(filePath, &text);
+
+    fclose(pFile);
     return;
 }
 
@@ -41,3 +49,4 @@ int isNotValidFirstCharacter(char *lineContent)
 {
     return !(lineContent[0] == '_' || isalpha(lineContent[0]));
 }
+

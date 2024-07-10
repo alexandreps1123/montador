@@ -1,11 +1,13 @@
 #include "pre_processor.h"
 
-const int MAX_LINE_LENGTH = 256;
-const int MAX_TOKEN_LENGTH = 80;
-const int MAX_EQU_DECLARATION = 20;
-
-Text preProcessor(FILE *pFile)
+void preProcessor(char *filePath)
 {
+    FILE *pFile;
+    pFile = openFile(filePath);
+    
+    Text text;
+    createText(&text);
+        
     Line lineContent;
     char line[MAX_LINE_LENGTH];
 
@@ -15,9 +17,6 @@ Text preProcessor(FILE *pFile)
 
     int countEqu = 0;
     EQU equ[MAX_EQU_DECLARATION];
-
-    Text text;
-    createText(&text);
 
     clearString(lineContent.line, MAX_LINE_LENGTH);
     clearString(line, MAX_LINE_LENGTH);
@@ -91,17 +90,10 @@ Text preProcessor(FILE *pFile)
         clearString(lineContent.line, MAX_LINE_LENGTH);
     }
 
-    return text;
-}
+    writeFile(filePath, &text);
 
-void clearString(char *lineContent, int length)
-{
-    int i = 0;
-    while (i < length)
-    {
-        lineContent[i] = '\0';
-        i++;
-    }
+    fclose(pFile);
+    return;
 }
 
 void removeComments(char *lineContent)
@@ -148,20 +140,7 @@ void toUpperCase(char *lineContent)
 
 int validInitialCharacter(char *lineContent)
 {
-    return !(lineContent[0] == '\n' || lineContent[0] == ';' || lineContent[0] == NULL);
-}
-
-int isLabel(char *lineContent)
-{
-    int i = 0;
-    while (i < MAX_LINE_LENGTH)
-    {
-        if (lineContent[i] == ':') return 1;
-
-        i++;
-    }
-
-    return 0;
+    return !(lineContent[0] == '\n' || lineContent[0] == ';' || lineContent[0] == '\0');
 }
 
 int isPureLabel(char *lineContent)
