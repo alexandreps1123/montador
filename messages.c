@@ -31,6 +31,12 @@ void openFileErrorMessage()
 
 void parserErrorMessage(int countLine)
 {
-    printf("Erro léxico, linha: %d\n", countLine);
+    printf("Erro lexico, linha: %d\n", countLine);
+    return;
+}
+
+void opcodeInvalidErrorMessage(int countLine)
+{
+    printf("Instrucao invalida, linha: %d\n", countLine);
     return;
 }
