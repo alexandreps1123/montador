@@ -21,7 +21,6 @@ void removeComments(char *lineContent);
 void removeUnnecessaryCharacters(char *lineContent);
 void toUpperCase(char *lineContent);
 int validInitialCharacter(char *lineContent);
-int isLabel(char *lineContent);
 int isPureLabel(char *lineContent);
 int isEQU(char *lineContent);
 void changeForEQUValue(char *lineContent, EQU equ);

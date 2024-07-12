@@ -10,7 +10,7 @@ void clearString(char *lineContent, int length)
     }
 }
 
-int isLabel(char *lineContent)
+int isLabelDefinition(char *lineContent)
 {
     int i = 0;
     while (i < MAX_LINE_LENGTH)

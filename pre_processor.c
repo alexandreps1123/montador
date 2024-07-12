@@ -29,7 +29,7 @@ void preProcessor(char *filePath)
             
         if (validInitialCharacter(lineContent.line))
         {
-            if (isLabel(lineContent.line) == 1 && isPureLabel(lineContent.line) == 1)
+            if (isLabelDefinition(lineContent.line) == 1 && isPureLabel(lineContent.line) == 1)
             {
                 countPureLabel++;
                 strcat(line, lineContent.line);

@@ -7,7 +7,7 @@
 #include <string.h>
 
 void clearString(char *lineContent, int lenght);
-int isLabel(char *lineContent);
+int isLabelDefinition(char *lineContent);
 
 
 #endif /* __COMMON__ */
