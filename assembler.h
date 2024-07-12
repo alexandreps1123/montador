@@ -11,9 +11,29 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct MEMORIA
+{
+    char token[MAX_TOKEN_LENGTH];
+} MEMORIA;
+
+typedef struct TABELA_SIMBOLOS
+{
+    char simbolo[MAX_TOKEN_LENGTH];
+    int def;
+    int lista[MAX_MEMORIA];
+} TABELA_SIMBOLOS;
+
+typedef struct OPERACAO
+{
+    char* value;
+    int expectedOperators;
+} OPERACAO;
+
 void assembler(char *filePath);
-void parser(char *line, int countLine, char *delimiter);
+void parser(char *token, int countLine);
 int isNotValidFirstCharacter(char *lineContent);
-int isLabel(char *lineContent);
+int isDigitOrXDigit(char *token);
+char* tokenToOPCODE(char* token);
+int isOPCODE(char* token);
 
 #endif /* __ASSEMBLER__ */
