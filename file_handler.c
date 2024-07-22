@@ -18,17 +18,31 @@ void writeFile(char *filePath, Text *text)
 	if(strcmp(getExtFile(filePath), "asm")==0) 
 	{
 		pFile = fopen(strcat(getNameFile(filePath),".pre"), "w");
+
+		while (isEmpty(text) != 1)
+		{
+			line = *(printHead(text));
+			fputs(line.line, pFile);
+			fputs("\n", pFile);
+
+			dequeue(text);
+		}
 	} 
-	else pFile = fopen(strcat(getNameFile(filePath),".obj"), "w");
+	else {
+		pFile = fopen(strcat(getNameFile(filePath),".obj"), "w");
 
-	while (isEmpty(text) != 1)
-	{
-		line = *(printHead(text));
-		fputs(line.line, pFile);
+		while (isEmpty(text) != 1)
+		{
+			line = *(printHead(text));
+			fputs(line.line, pFile);
+			fputs(" ", pFile);
+
+			dequeue(text);
+		}
+
 		fputs("\n", pFile);
+	};
 
-		dequeue(text);
-	}
 
 	fclose(pFile);
 

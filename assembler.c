@@ -1,14 +1,16 @@
 #include <ctype.h>
 #include "assembler.h"
 
-
 void assembler(char *filePath)
 {
     MEMORIA memoria[MAX_MEMORIA];
+    TABELA_SIMBOLOS tabelaSimbolos[MAX_MEMORIA];
 
     FILE *pFile;
     pFile = openFile(filePath);
-    
+
+    Line lineContent;
+
     Text text;
     createText(&text);
 
@@ -16,51 +18,88 @@ void assembler(char *filePath)
     int countLine = 1;
     int countToken = 0;
     int countTokenPerline = 0;
+    int countSimbol = 0;
     int isConst = 0;
-
-    Line lineContent;
+    char subString[MAX_TOKEN_LENGTH];
 
     while (fgets(lineContent.line, MAX_LINE_LENGTH, pFile) != NULL)
     {
         char *pch;
-    
+
         pch = strtok(lineContent.line, " ,\n");
 
         while (pch != NULL)
         {
             clearString(memoria[countToken].token, MAX_TOKEN_LENGTH);
-            
-            if(isLabelDefinition(pch)) 
+
+            // printf("%d  %s\n", isLabelDefinition(pch), pch);
+            if (isLabelDefinition(pch))
             {
-                // TODO: resolver na tabela de simbolos
                 parser(pch, countLine);
+
+                clearString(tabelaSimbolos[countSimbol].simbolo, MAX_TOKEN_LENGTH);
+                strcpy(tabelaSimbolos[countSimbol].simbolo, pch);
+                tabelaSimbolos[countSimbol].def = 1;
+                tabelaSimbolos[countSimbol].valor = PC;
+                
+                countSimbol++;
+
                 pch = strtok(NULL, " ,\n");
+
                 continue;
             }
 
-            if(isConst==1) 
+            if (isConst == 1)
             {
+                strcpy(memoria[countToken].token, pch);
+
+                pch = strtok(NULL, " ,\n");
+                countTokenPerline++;
+                countToken++;
+                PC++;
                 isConst = 0;
-                printf("%d  %s\n", PC, pch);
+
+                continue;
             }
 
-            if (strcmp(tokenToOPCODE(pch), "99") != 0) 
+            // verifica opcode
+            if (strcmp(tokenToOPCODE(pch), "99") != 0)
             {
-                printf("%d  %s\n", PC, pch);
+                strcpy(memoria[countToken].token, pch);
+                // printf("%d  %s\n", PC, pch);
             }
-            else if(strcmp(pch, "CONST")==0) 
+            // se const pula pro proximo token
+            else if (strcmp(pch, "CONST") == 0)
             {
                 pch = strtok(NULL, " ,\n");
                 countTokenPerline++;
                 isConst = 1;
                 continue;
             }
-            else if(countTokenPerline==0)
+            // se n encontrou opcode/diretiva na primeira posicao da linha, ou depois de uma decalacao de label
+            else if (countTokenPerline == 0)
             {
                 opcodeInvalidErrorMessage(countLine);
             }
+            else
+            {
+                parser(pch, countLine);
 
-            strcpy(memoria[countToken].token, pch);
+                clearString(tabelaSimbolos[countSimbol].simbolo, MAX_TOKEN_LENGTH);
+                strcpy(memoria[countToken].token, pch);
+                strcpy(tabelaSimbolos[countSimbol].simbolo, pch);
+                tabelaSimbolos[countSimbol].def = 0;
+                tabelaSimbolos[countSimbol].valor = PC;
+                
+                countSimbol++;
+
+                // pch = strtok(NULL, " ,\n");
+
+                // continue;
+            }
+
+            // printf("%d  %s\n", PC, pch);
+
             pch = strtok(NULL, " ,\n");
             countTokenPerline++;
             countToken++;
@@ -69,9 +108,7 @@ void assembler(char *filePath)
 
         countTokenPerline = 0;
         countLine++;
-        
-        
-        
+
         // label is defined?
         // if (isLabelDefinition(lineContent.line) == 1) {
         //     parser(lineContent.line, countLine,  ":");
@@ -83,10 +120,46 @@ void assembler(char *filePath)
 
     for (int i = 0; i < countToken; i++)
     {
-        // if(strcmp(memoria[countLine].token, "\n") != 0) {
-            printf("%s\n", memoria[i].token);
-        // }
+        clearString(lineContent.line, MAX_LINE_LENGTH);
+        for (int j = 0; j < countSimbol; j++)
+        {
+            clearString(subString, MAX_TOKEN_LENGTH);
+            char* pch = strstr(tabelaSimbolos[j].simbolo, memoria[i].token);
+
+            if(tabelaSimbolos[j].def==1 && pch!=NULL)
+            {
+                int address = tabelaSimbolos[j].valor;
+
+                for (int k = 0; k < countSimbol; k++)
+                {
+                    if(strcmp(tabelaSimbolos[k].simbolo, memoria[i].token)==0)
+                    {
+                        char str[20];
+
+                        // int to string
+                        sprintf(str, "%d", address);
+
+                        strcpy(memoria[tabelaSimbolos[k].valor].token, str);
+                    }
+                }
+            }
+        }
+
+        // put data into
+        strcpy(lineContent.line, memoria[i].token);
+        // printf("%d %s\n", i, memoria[i].token);
+        enqueue(&text, &lineContent);
     }
+
+    // printf("\n\ntabela de simbolos\n");
+    // for (int i = 0; i < countSimbol; i++)
+    // {
+    //     // if(strcmp(memoria[countLine].token, "\n") != 0) {
+    //     printf("%s\n", tabelaSimbolos[i].simbolo);
+    //     printf("%d\n", tabelaSimbolos[i].def);
+    //     printf("%d\n", tabelaSimbolos[i].valor);
+    //     // }
+    // }
 
     writeFile(filePath, &text);
 
@@ -94,9 +167,9 @@ void assembler(char *filePath)
     return;
 }
 
-void parser(char *token, int countLine) 
+void parser(char *token, int countLine)
 {
-    if (isNotValidFirstCharacter(token)!=0) 
+    if (isNotValidFirstCharacter(token) != 0)
     {
         parserErrorMessage(countLine);
     }
@@ -109,71 +182,73 @@ int isNotValidFirstCharacter(char *lineContent)
     return !(lineContent[0] == '_' || isalpha(lineContent[0]));
 }
 
-int isOPCODE(char* token) {
+int isOPCODE(char *token)
+{
     return strcmp(token, "SPACE") || strcmp(token, "ADD") || strcmp(token, "SUB") || strcmp(token, "MUL") ||
-            strcmp(token, "DIV") || strcmp(token, "JMP") || strcmp(token, "JMPN") || strcmp(token, "JMPP") || 
-            strcmp(token, "JMPZ") || strcmp(token, "COPY") || strcmp(token, "LOAD") || strcmp(token, "STORE") ||
-            strcmp(token, "INPUT") || strcmp(token, "OUTPUT") || strcmp(token, "STOP");
+           strcmp(token, "DIV") || strcmp(token, "JMP") || strcmp(token, "JMPN") || strcmp(token, "JMPP") ||
+           strcmp(token, "JMPZ") || strcmp(token, "COPY") || strcmp(token, "LOAD") || strcmp(token, "STORE") ||
+           strcmp(token, "INPUT") || strcmp(token, "OUTPUT") || strcmp(token, "STOP");
 }
 
-char* tokenToOPCODE(char* token) {
-    if(strcmp(token, "SPACE")==0) 
+char *tokenToOPCODE(char *token)
+{
+    if (strcmp(token, "SPACE") == 0)
     {
         return strcpy(token, SPACE);
     }
-    else if(strcmp(token, "ADD")==0) 
+    else if (strcmp(token, "ADD") == 0)
     {
         return strcpy(token, ADD);
     }
-    else if(strcmp(token, "SUB")==0) 
+    else if (strcmp(token, "SUB") == 0)
     {
         return strcpy(token, SUB);
     }
-    else if(strcmp(token, "MUL")==0) 
+    else if (strcmp(token, "MUL") == 0)
     {
         return strcpy(token, MUL);
     }
-    else if(strcmp(token, "DIV")==0) 
+    else if (strcmp(token, "DIV") == 0)
     {
         return strcpy(token, DIV);
     }
-    else if(strcmp(token, "JMP")==0) 
+    else if (strcmp(token, "JMP") == 0)
     {
         return strcpy(token, JMP);
     }
-    else if(strcmp(token, "JMPN")==0) 
+    else if (strcmp(token, "JMPN") == 0)
     {
         return strcpy(token, JMPN);
     }
-    else if(strcmp(token, "JMPP")==0) 
+    else if (strcmp(token, "JMPP") == 0)
     {
         return strcpy(token, JMPP);
     }
-    else if(strcmp(token, "JMPZ")==0) 
+    else if (strcmp(token, "JMPZ") == 0)
     {
         return strcpy(token, JMPZ);
     }
-    else if(strcmp(token, "COPY")==0) 
+    else if (strcmp(token, "COPY") == 0)
     {
         return strcpy(token, COPY);
     }
-    else if(strcmp(token, "LOAD")==0) 
+    else if (strcmp(token, "LOAD") == 0)
     {
         return strcpy(token, LOAD);
     }
-    else if(strcmp(token, "STORE")==0) 
+    else if (strcmp(token, "STORE") == 0)
     {
         return strcpy(token, STORE);
     }
-    else if(strcmp(token, "INPUT")==0) 
+    else if (strcmp(token, "INPUT") == 0)
     {
         return strcpy(token, INPUT);
     }
-    else if(strcmp(token, "OUTPUT")==0) 
+    else if (strcmp(token, "OUTPUT") == 0)
     {
         return strcpy(token, OUTPUT);
     }
-    else if(strcmp(token, "STOP")==0) 
+    else if (strcmp(token, "STOP") == 0)
     {
         return strcpy(token, STOP);
     }
@@ -181,7 +256,12 @@ char* tokenToOPCODE(char* token) {
     return "99";
 }
 
-int isDigitOrXDigit(char *token) {
+void storeInSimbolTable() {
+
+}
+
+int isDigitOrXDigit(char *token)
+{
     int checkDigit = 0;
     int checkXDigit = 0;
 

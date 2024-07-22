@@ -25,7 +25,7 @@ void validateInputs(char *flag, char *filePath)
     }
 
     extension = getExtFile(filePath);
-    validateFlagAndFileExtension(flag, extension);
+    // validateFlagAndFileExtension(flag, extension);
 }
 
 char* getExtFile(char *filePath)

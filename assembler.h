@@ -19,8 +19,8 @@ typedef struct MEMORIA
 typedef struct TABELA_SIMBOLOS
 {
     char simbolo[MAX_TOKEN_LENGTH];
+    int valor;
     int def;
-    int lista[MAX_MEMORIA];
 } TABELA_SIMBOLOS;
 
 typedef struct OPERACAO

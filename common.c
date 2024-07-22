@@ -13,6 +13,7 @@ void clearString(char *lineContent, int length)
 int isLabelDefinition(char *lineContent)
 {
     int i = 0;
+
     while (i < MAX_LINE_LENGTH)
     {
         if (lineContent[i] == ':') return 1;
