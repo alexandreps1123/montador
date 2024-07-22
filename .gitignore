@@ -3,3 +3,7 @@ main
 
 .vscode
 .idea
+
+.asm
+.pre
+.obj
