@@ -4,6 +4,7 @@ main
 .vscode
 .idea
 
-.asm
-.pre
-.obj
+*.asm
+*.pre
+*.obj
+*.e
