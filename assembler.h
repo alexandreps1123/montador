@@ -36,5 +36,6 @@ int isDigitOrXDigit(char *token);
 char* tokenToOPCODE(char* token);
 int isOPCODE(char* token);
 int invalidCharacter(char *lineContent);
+int getOpcodeTokenCount(char *opcode);
 
 #endif /* __ASSEMBLER__ */
