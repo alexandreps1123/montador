@@ -46,3 +46,11 @@ void doubleLabelSameLineErrorMessage(int countLine)
     printf("Rotulo dobrado, linha: %d\n", countLine);
     return;
 }
+
+void incorrectArgumentNumbersErrorMessage(int countLine, int desireTokenPerline, char* firstToken, int countTokenPerline)
+{
+    printf("Erro sintático na linha %d: Esperava %d tokens após '%s', mas encontrou %d\n",countLine, (desireTokenPerline-1), firstToken, (countTokenPerline-1));
+    return;
+}
+
+        

@@ -137,7 +137,7 @@ void assembler(char *filePath)
 
         desireTokenPerline++;
         if (desireTokenPerline != countTokenPerline){
-            printf("Erro sintático na linha %d: Esperava %d tokens após '%s', mas encontrou %d\n",countLine, (desireTokenPerline-1), firstToken, (countTokenPerline-1));
+            incorrectArgumentNumbersErrorMessage(countLine, desireTokenPerline, firstToken, countTokenPerline);
         }
         desireTokenPerline = 0;
         labelDetection = 0;

@@ -11,5 +11,6 @@ void openFileErrorMessage();
 void parserErrorMessage(int countLine);
 void opcodeInvalidErrorMessage(int countLine);
 void doubleLabelSameLineErrorMessage(int countLine);
+void incorrectArgumentNumbersErrorMessage(int countLine, int desireTokenPerline, char* firstToken, int countTokenPerline);
 
 #endif /* __MESSAGES__ */
