@@ -21,7 +21,10 @@ void assembler(char *filePath)
     int countSimbol = 0;
     int countLabelPerLine = 0;
     int isConst = 0;
+    int desireTokenPerline = 0;
+    int labelDetection = 0;
     char subString[MAX_TOKEN_LENGTH];
+    char *firstToken;
 
     while (fgets(lineContent.line, MAX_LINE_LENGTH, pFile) != NULL)
     {
@@ -29,6 +32,15 @@ void assembler(char *filePath)
 
         countLabelPerLine = 0;
         pch = strtok(lineContent.line, " ,\n");
+
+        if (isLabelDefinition(pch)){
+            desireTokenPerline = 0;
+        }
+        else{
+            desireTokenPerline = getOpcodeTokenCount(pch);
+            firstToken = pch;
+        }
+        
 
         while (pch != NULL)
         {
@@ -52,9 +64,17 @@ void assembler(char *filePath)
                 countSimbol++;
                 countLabelPerLine++;
 
+                labelDetection = 1;
+
                 pch = strtok(NULL, " ,\n");
 
                 continue;
+            }
+
+            if (labelDetection){
+               desireTokenPerline += getOpcodeTokenCount(pch);
+               firstToken = pch;
+               labelDetection = 0; 
             }
 
             if (isConst == 1)
@@ -82,6 +102,7 @@ void assembler(char *filePath)
                 pch = strtok(NULL, " ,\n");
                 countTokenPerline++;
                 isConst = 1;
+                desireTokenPerline++;
                 continue;
             }
             // se n encontrou opcode/diretiva na primeira posicao da linha, ou depois de uma decalacao de label
@@ -114,7 +135,14 @@ void assembler(char *filePath)
             PC++;
         }
 
+        desireTokenPerline++;
+        if (desireTokenPerline != countTokenPerline){
+            printf("Erro sintático na linha %d: Esperava %d tokens após '%s', mas encontrou %d\n",countLine, (desireTokenPerline-1), firstToken, (countTokenPerline-1));
+        }
+        desireTokenPerline = 0;
+        labelDetection = 0;
         countTokenPerline = 0;
+
         countLine++;
 
         // label is defined?
@@ -315,4 +343,27 @@ int isDigitOrXDigit(char *token)
     }
 
     return checkDigit == 0 || checkXDigit == 0;
+}
+
+int getOpcodeTokenCount(char *opcode)
+{
+    if (strcmp(opcode, "ADD") == 0 || strcmp(opcode, "SUB") == 0 || strcmp(opcode, "MUL") == 0 ||
+        strcmp(opcode, "DIV") == 0 || strcmp(opcode, "JMP") == 0 || strcmp(opcode, "JMPN") == 0 ||
+        strcmp(opcode, "JMPP") == 0 || strcmp(opcode, "JMPZ") == 0 || strcmp(opcode, "LOAD") == 0 ||
+        strcmp(opcode, "STORE") == 0 || strcmp(opcode, "INPUT") == 0 || strcmp(opcode, "OUTPUT") == 0)
+    {
+        return 1;    
+    }
+    else if (strcmp(opcode, "COPY") == 0)
+    {
+        return 2;
+    }
+    else if (strcmp(opcode, "STOP") == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return 0;
+    }
 }
