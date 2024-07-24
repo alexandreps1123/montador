@@ -35,5 +35,6 @@ int isNotValidFirstCharacter(char *lineContent);
 int isDigitOrXDigit(char *token);
 char* tokenToOPCODE(char* token);
 int isOPCODE(char* token);
+int invalidCharacter(char *lineContent);
 
 #endif /* __ASSEMBLER__ */

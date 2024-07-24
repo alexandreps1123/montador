@@ -172,6 +172,8 @@ void parser(char *token, int countLine)
     if (isNotValidFirstCharacter(token) != 0)
     {
         parserErrorMessage(countLine);
+    } else if(invalidCharacter(token) == 1) {
+        parserErrorMessage(countLine);
     }
 
     return;
@@ -180,6 +182,31 @@ void parser(char *token, int countLine)
 int isNotValidFirstCharacter(char *lineContent)
 {
     return !(lineContent[0] == '_' || isalpha(lineContent[0]));
+}
+
+int invalidCharacter(char *lineContent)
+{
+    if(isLabelDefinition(lineContent)) 
+    {
+        for (int i = 0; i < strlen(lineContent)-1; i++)
+        {
+            if(!(lineContent[i] == '_' || isalpha(lineContent[i]) || isdigit(lineContent[i])))
+            {
+                return 1;
+            }
+        }
+    } else
+    {
+        for (int i = 0; i < strlen(lineContent); i++)
+        {
+            if(!(lineContent[i] == '_' || isalpha(lineContent[i]) || isdigit(lineContent[i])))
+            {
+                return 1;
+            }
+        }
+    }
+
+    return 0;
 }
 
 int isOPCODE(char *token)
