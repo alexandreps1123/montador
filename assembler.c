@@ -19,6 +19,7 @@ void assembler(char *filePath)
     int countToken = 0;
     int countTokenPerline = 0;
     int countSimbol = 0;
+    int countLabelPerLine = 0;
     int isConst = 0;
     char subString[MAX_TOKEN_LENGTH];
 
@@ -26,6 +27,7 @@ void assembler(char *filePath)
     {
         char *pch;
 
+        countLabelPerLine = 0;
         pch = strtok(lineContent.line, " ,\n");
 
         while (pch != NULL)
@@ -35,6 +37,11 @@ void assembler(char *filePath)
             // printf("%d  %s\n", isLabelDefinition(pch), pch);
             if (isLabelDefinition(pch))
             {
+                if(countLabelPerLine != 0) {
+                    doubleLabelSameLineErrorMessage(countLine);
+                    pch = strtok(NULL, " ,\n");
+                    continue;
+                }
                 parser(pch, countLine);
 
                 clearString(tabelaSimbolos[countSimbol].simbolo, MAX_TOKEN_LENGTH);
@@ -43,6 +50,7 @@ void assembler(char *filePath)
                 tabelaSimbolos[countSimbol].valor = PC;
                 
                 countSimbol++;
+                countLabelPerLine++;
 
                 pch = strtok(NULL, " ,\n");
 
@@ -172,7 +180,9 @@ void parser(char *token, int countLine)
     if (isNotValidFirstCharacter(token) != 0)
     {
         parserErrorMessage(countLine);
-    } else if(invalidCharacter(token) == 1) {
+    } 
+    else if(invalidCharacter(token) == 1) 
+    {
         parserErrorMessage(countLine);
     }
 

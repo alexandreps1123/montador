@@ -40,3 +40,9 @@ void opcodeInvalidErrorMessage(int countLine)
     printf("Instrucao invalida, linha: %d\n", countLine);
     return;
 }
+
+void doubleLabelSameLineErrorMessage(int countLine)
+{
+    printf("Rotulo dobrado, linha: %d\n", countLine);
+    return;
+}

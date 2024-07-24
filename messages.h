@@ -10,5 +10,6 @@ void invalidExtensionMessage();
 void openFileErrorMessage();
 void parserErrorMessage(int countLine);
 void opcodeInvalidErrorMessage(int countLine);
+void doubleLabelSameLineErrorMessage(int countLine);
 
 #endif /* __MESSAGES__ */
